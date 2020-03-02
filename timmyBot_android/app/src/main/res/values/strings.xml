@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">TimmyBot</string>
     <string name="bluetooth_not_supported">Your device doesn\'t support Bluetooth</string>
+    <string name="bluetooth_must_be_enabled">Bluetooth must be Enabled</string>
 </resources>
