@@ -51,7 +51,8 @@ class MainActivity : AppCompatActivity() {
             val device: BluetoothDevice = listDevices[position]
 
             val intent = Intent(this, ControlActivity::class.java)
-            intent.putExtra(EXTRA_ADDRESS, device.address)
+            val bundle = Bundle()
+            intent.putExtra(EXTRA_DEVICE, device)
             startActivity(intent)
         }
     }
@@ -129,6 +130,6 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val REQUEST_ENABLE_BT = 1
         private const val REQUEST_FINE_LOCATION = 2
-        const val EXTRA_ADDRESS = "ADDRESS_DEVICE"
+        const val EXTRA_DEVICE = "DEVICE"
     }
 }
