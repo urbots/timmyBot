@@ -10,8 +10,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -22,6 +20,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     private val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
+    private val listDevices : ArrayList<BluetoothDevice> = ArrayList()
+    private val listBluetoothAdapter = BluetoothDeviceListAdapter(this, listDevices)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,10 +44,10 @@ class MainActivity : AppCompatActivity() {
             discover()
         }
 
+        select_device_list.adapter = listBluetoothAdapter
     }
 
     private fun reqPermissions() {
-        // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_FINE_LOCATION)
         }
@@ -59,26 +59,20 @@ class MainActivity : AppCompatActivity() {
             val action: String? = intent.action
             when(action) {
                 BluetoothDevice.ACTION_FOUND -> {
-                    val device: BluetoothDevice =
-                        intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
-                    val deviceName = device.name
-                    val deviceHardwareAddress = device.address // MAC address
-                    println(deviceName + " " + deviceHardwareAddress)
+                    listDevices.add(intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE))
+                    listBluetoothAdapter?.notifyDataSetChanged()
                 }
             }
         }
     }
 
-
     private fun discover() {
         bluetoothAdapter?.startDiscovery()
         val pairedDevices: Set<BluetoothDevice>? = bluetoothAdapter?.bondedDevices
         pairedDevices?.forEach { device ->
-            val deviceName = device.name
-            val deviceHardwareAddress = device.address // MAC address
-            println(deviceName + " " + deviceHardwareAddress)
+            listDevices.add(device)
         }
-
+        listBluetoothAdapter?.notifyDataSetChanged()
     }
 
     override fun onActivityResult(requestCode: Int,  resultCode: Int, data: Intent?) {
@@ -86,11 +80,12 @@ class MainActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_CANCELED) {
             Toast.makeText(applicationContext, R.string.bluetooth_must_be_enabled, Toast.LENGTH_SHORT).show()
             finish()
+        } else {
+            discover()
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
             REQUEST_FINE_LOCATION -> {
                 // If request is cancelled, the result arrays are empty.
@@ -102,7 +97,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
 
     override fun onDestroy() {
         super.onDestroy()
