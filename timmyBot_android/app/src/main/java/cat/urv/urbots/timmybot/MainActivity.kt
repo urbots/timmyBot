@@ -10,6 +10,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.widget.AdapterView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -45,6 +46,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         select_device_list.adapter = listBluetoothAdapter
+        select_device_list.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+            bluetoothAdapter?.cancelDiscovery()
+            val device: BluetoothDevice = listDevices[position]
+
+            val intent = Intent(this, ControlActivity::class.java)
+            intent.putExtra(EXTRA_ADDRESS, device.address)
+            startActivity(intent)
+        }
     }
 
     private fun reqPermissions() {
@@ -59,8 +68,11 @@ class MainActivity : AppCompatActivity() {
             val action: String? = intent.action
             when(action) {
                 BluetoothDevice.ACTION_FOUND -> {
-                    listDevices.add(intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE))
-                    listBluetoothAdapter?.notifyDataSetChanged()
+                    val device: BluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
+                    if(!listDevices.contains(device)){
+                        listDevices.add(intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE))
+                        listBluetoothAdapter?.notifyDataSetChanged()
+                    }
                 }
             }
         }
@@ -117,5 +129,6 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val REQUEST_ENABLE_BT = 1
         private const val REQUEST_FINE_LOCATION = 2
+        const val EXTRA_ADDRESS = "ADDRESS_DEVICE"
     }
 }

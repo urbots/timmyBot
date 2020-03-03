@@ -4,4 +4,5 @@
     <string name="bluetooth_must_be_enabled">Bluetooth must be Enabled</string>
     <string name="permissions_are_required">Location permissions are required</string>
     <string name="bluetooth_scanning_message">Bluetooth devices</string>
+    <string name="bluetooth_can_not_connect">Can not connect to device</string>
 </resources>
