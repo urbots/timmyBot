@@ -51,7 +51,6 @@ class MainActivity : AppCompatActivity() {
             val device: BluetoothDevice = listDevices[position]
 
             val intent = Intent(this, ControlActivity::class.java)
-            val bundle = Bundle()
             intent.putExtra(EXTRA_DEVICE, device)
             startActivity(intent)
         }
