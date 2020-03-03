@@ -98,8 +98,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        bluetoothAdapter?.cancelDiscovery()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        bluetoothAdapter?.startDiscovery()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
+        bluetoothAdapter?.cancelDiscovery()
         unregisterReceiver(receiver)
     }
 
