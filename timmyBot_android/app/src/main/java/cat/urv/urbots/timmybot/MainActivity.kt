@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
+    private val bluetoothAdapter: BluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
     private val listDevices : ArrayList<BluetoothDevice> = ArrayList()
     private val listBluetoothAdapter = BluetoothDeviceListAdapter(this, listDevices)
 
@@ -28,26 +28,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        if (bluetoothAdapter == null) {
-            Toast.makeText(applicationContext, R.string.bluetooth_not_supported, Toast.LENGTH_LONG).show()
-        } else {
-            reqPermissions()
+        reqPermissions()
 
-            // Register for broadcasts when a device is discovered.
-            val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
-            registerReceiver(receiver, filter)
+        // Register for broadcasts when a device is discovered.
+        val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
+        registerReceiver(receiver, filter)
 
-            if (!bluetoothAdapter.isEnabled) {
-                val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
-            }
-
-            discover()
+        if (!bluetoothAdapter.isEnabled) {
+            val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
         }
+
+        discover()
 
         select_device_list.adapter = listBluetoothAdapter
         select_device_list.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            bluetoothAdapter?.cancelDiscovery()
+            bluetoothAdapter.cancelDiscovery()
             val device: BluetoothDevice = listDevices[position]
 
             val intent = Intent(this, ControlActivity::class.java)
@@ -65,13 +61,12 @@ class MainActivity : AppCompatActivity() {
     // Create a BroadcastReceiver for ACTION_FOUND.
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            val action: String? = intent.action
-            when(action) {
+            when(intent.action) {
                 BluetoothDevice.ACTION_FOUND -> {
                     val device: BluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
                     if(!listDevices.contains(device)){
-                        listDevices.add(intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE))
-                        listBluetoothAdapter?.notifyDataSetChanged()
+                        listDevices.add(device)
+                        listBluetoothAdapter.notifyDataSetChanged()
                     }
                 }
             }
@@ -79,12 +74,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun discover() {
-        bluetoothAdapter?.startDiscovery()
-        val pairedDevices: Set<BluetoothDevice>? = bluetoothAdapter?.bondedDevices
+        bluetoothAdapter.startDiscovery()
+        val pairedDevices: Set<BluetoothDevice>? = bluetoothAdapter.bondedDevices
         pairedDevices?.forEach { device ->
             listDevices.add(device)
         }
-        listBluetoothAdapter?.notifyDataSetChanged()
+        listBluetoothAdapter.notifyDataSetChanged()
     }
 
     override fun onActivityResult(requestCode: Int,  resultCode: Int, data: Intent?) {
@@ -112,17 +107,17 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        bluetoothAdapter?.cancelDiscovery()
+        bluetoothAdapter.cancelDiscovery()
     }
 
     override fun onResume() {
         super.onResume()
-        bluetoothAdapter?.startDiscovery()
+        bluetoothAdapter.startDiscovery()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        bluetoothAdapter?.cancelDiscovery()
+        bluetoothAdapter.cancelDiscovery()
         unregisterReceiver(receiver)
     }
 
