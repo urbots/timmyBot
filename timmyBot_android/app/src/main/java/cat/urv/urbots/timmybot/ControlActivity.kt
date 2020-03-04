@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NavUtils
+import kotlinx.android.synthetic.main.activity_control.*
 import java.util.*
+
 
 class ControlActivity: AppCompatActivity() {
 
@@ -23,6 +25,11 @@ class ControlActivity: AppCompatActivity() {
         device = intent.extras!!.getParcelable(MainActivity.EXTRA_DEVICE)!!
 
         bluetoothService = BluetoothService(device)
+
+        joystick.setOnMoveListener { angle, strength ->
+            println(angle)
+            println(strength)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
