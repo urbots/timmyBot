@@ -1,5 +1,6 @@
 package cat.urv.urbots.timmybot
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.bluetooth.BluetoothDevice
 import android.content.Context
@@ -21,11 +22,12 @@ class BluetoothDeviceListAdapter(private var activity: Activity, private var ite
         }
     }
 
+    @SuppressLint("InflateParams")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view: View?
         val viewHolder: ViewHolder
         if (convertView == null) {
-            val inflater = activity?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val inflater = activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             view = inflater.inflate(R.layout.list_device_adapter, null)
             viewHolder = ViewHolder(view)
             view?.tag = viewHolder
@@ -34,7 +36,7 @@ class BluetoothDeviceListAdapter(private var activity: Activity, private var ite
             viewHolder = view.tag as ViewHolder
         }
 
-        var device = items[position]
+        val device = items[position]
         viewHolder.txtName?.text = device.name
         viewHolder.txtAddress?.text = device.address
 
