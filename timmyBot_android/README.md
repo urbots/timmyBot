@@ -11,7 +11,12 @@ git clone https://github.com/urbots/timmyBot.git
 To control robot, you must pair the Android device with Arduino robot with Bluetooth. The Android app is going to ask for Bluetooth permissions and then, you will be able to connect the device by app.
 
 # Interface
-TODO - Screenshots of Interface
+Scanning             |  Connected
+:-------------------------:|:-------------------------:
+![Image_Interface_1.png](../Image_Interface_1.png)   |  ![Image_Interface_2.png](../Image_Interface_2.png)
+
 
 # Requirements
+We use [virtual-joystick-android](https://github.com/controlwear/virtual-joystick-android) to create a joystick.
 In order to use this project, you must run with minimum sdk 23 (Android 6.0)
+
