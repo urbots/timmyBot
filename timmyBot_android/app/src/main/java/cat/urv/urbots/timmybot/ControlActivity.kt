@@ -4,9 +4,12 @@ import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NavUtils
 import java.io.IOException
 import java.util.*
+
 
 private const val TAG = "TIMMY_DEBUG_TAG"
 
@@ -20,8 +23,19 @@ class ControlActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_control)
+        actionBar?.setDisplayHomeAsUpEnabled(true)
 
         device = intent.extras!!.getParcelable(MainActivity.EXTRA_DEVICE)!!
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                NavUtils.navigateUpFromSameTask(this)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onResume() {
@@ -48,7 +62,6 @@ class ControlActivity: AppCompatActivity() {
         }
 
         public override fun run() {
-
             mmSocket?.use { socket ->
                 socket.connect()
                 // The connection attempt succeeded. Perform work associated with
