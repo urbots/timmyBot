@@ -10,7 +10,9 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.View
 import android.widget.AdapterView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -43,6 +45,9 @@ class MainActivity : AppCompatActivity() {
 
         select_device_list.adapter = listBluetoothAdapter
         select_device_list.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+            information_state_txt.setText(R.string.bluetooth_connecting)
+            select_device_list.visibility = View.GONE
+
             bluetoothAdapter.cancelDiscovery()
             val device: BluetoothDevice = listDevices[position]
 
@@ -112,6 +117,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        select_device_list.visibility = View.VISIBLE
+        information_state_txt.setText(R.string.bluetooth_scanning_message)
         bluetoothAdapter.startDiscovery()
     }
 
