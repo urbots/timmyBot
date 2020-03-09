@@ -12,7 +12,6 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -34,6 +33,8 @@ class MainActivity : AppCompatActivity() {
 
         // Register for broadcasts when a device is discovered.
         val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
+        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED)
+        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
         registerReceiver(receiver, filter)
 
         if (!bluetoothAdapter.isEnabled) {
@@ -48,11 +49,12 @@ class MainActivity : AppCompatActivity() {
             information_state_txt.setText(R.string.bluetooth_connecting)
             select_device_list.visibility = View.GONE
 
-            bluetoothAdapter.cancelDiscovery()
             val device: BluetoothDevice = listDevices[position]
 
             val intent = Intent(this, ControlActivity::class.java)
             intent.putExtra(EXTRA_DEVICE, device)
+            bluetoothAdapter.cancelDiscovery()
+
             startActivity(intent)
         }
     }

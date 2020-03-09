@@ -6,13 +6,10 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NavUtils
 import kotlinx.android.synthetic.main.activity_control.*
-import java.util.*
-
 
 class ControlActivity: AppCompatActivity() {
 
     companion object {
-        val MY_UUID: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
         lateinit var device: BluetoothDevice
         lateinit var bluetoothService: BluetoothService
     }
@@ -25,11 +22,19 @@ class ControlActivity: AppCompatActivity() {
         device = intent.extras!!.getParcelable(MainActivity.EXTRA_DEVICE)!!
 
         bluetoothService = BluetoothService(device)
+        bluetoothService.connect()
 
         joystick.setOnMoveListener { angle, strength ->
-            println(angle)
-            println(strength)
+
+            val angleRadians = Math.toRadians(angle.toDouble())
+            val x = (strength * kotlin.math.cos(angleRadians)) / 100
+            val y = (strength * kotlin.math.sin(angleRadians)) / 100
+
+            val data:String = String.format("%.2f#%.2f#\r", y, x)
+
+            bluetoothService.write(data.toByteArray())
         }
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -40,11 +45,6 @@ class ControlActivity: AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        bluetoothService.connect()
     }
 
     override fun onBackPressed() {
