@@ -2,7 +2,7 @@
 TimmyBot is a project to move a littel robots made with Arduino and moved by Android app.
 
 # Use
-To use this project, you should read the documentation from Arduino project and from Android project. You can see this documentation here [Arduino](https://github.com/urbots/timmyBot/tree/master/timmyBot_arduino), [Android]https://github.com/urbots/timmyBot/tree/master/timmyBot_android)
+To use this project, you should read the documentation from Arduino project and from Android project. You can see this documentation here [Arduino](https://github.com/urbots/timmyBot/tree/master/timmyBot_arduino), [Android](https://github.com/urbots/timmyBot/tree/master/timmyBot_android)
 
 # Versioning
 
