@@ -9,9 +9,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         custom:JV_buttonColor="@color/colorPrimary"
-        custom:JV_buttonSizeRatio="15%"
+        custom:JV_buttonSizeRatio="25%"
         custom:JV_borderColor="@color/colorPrimaryDark"
-        custom:JV_backgroundColor="@color/colorAccent"
+        custom:JV_backgroundColor="@color/colorAccentTransparency"
         custom:JV_borderWidth="4dp"
         custom:JV_fixedCenter="false"
         android:id="@+id/joystick"/>
