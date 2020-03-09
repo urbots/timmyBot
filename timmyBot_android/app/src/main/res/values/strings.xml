@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">TimmyBot</string>
+    <string name="bluetooth_not_supported">Your device doesn\'t support Bluetooth</string>
+    <string name="bluetooth_must_be_enabled">Bluetooth must be Enabled</string>
+    <string name="permissions_are_required">Location permissions are required</string>
+    <string name="bluetooth_scanning_message">Available devices</string>
+    <string name="bluetooth_can_not_connect">Can not connect to device</string>
+    <string name="bluetooth_connecting">Connecting to device</string>
+</resources>
