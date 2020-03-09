@@ -9,22 +9,10 @@ Kinematics kinematics(MOTOR_MAX_RPM, WHEEL_DIAMETER, FR_WHEEL_DISTANCE,
 
 DRV8835MotorShield motors;
 
-String ReadData(SoftwareSerial bt)
-{
-  String s = "";
-  char c = 0;
-  while (bt.available() && c!= '\r')
-  {
-    c = bt.read();
-    s.concat(c);
-  }
-  return s;
-}
-
 void ConvertData(String data, float *linear, float *angular)
 {
-  (*linear) = data.substring(0,3).toFloat();
-  (*angular) = data.substring(4,7).toFloat();
+  (*linear) = data.substring(0, data.indexOf('#')).toFloat();
+  (*angular) = data.substring(data.indexOf('#')+1,data.length()-1).toFloat();
 }
 
 void MoveRobot(float linear, float angular)
