@@ -18,5 +18,6 @@ Scanning             |  Connected
 
 # Requirements
 We use [virtual-joystick-android](https://github.com/controlwear/virtual-joystick-android) to create a joystick.
-In order to use this project, you must run with minimum sdk 23 (Android 6.0)
+
+In order to use this project, you must run with minimum sdk 21 (Android 5.0)
 
