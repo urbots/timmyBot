@@ -18,7 +18,7 @@ void loop() {
   char c='0';
   String s = "";
 
-  while (c != '?')
+  while (c != '\r')
   {
     if (HC05.available())
     {
@@ -43,6 +43,8 @@ void loop() {
     Serial.print("angular: ");
     Serial.println(angular);
   }
-  
+
+  linear *= 80;
+  angular *= -100;
   MoveRobot(linear, angular);
 }
